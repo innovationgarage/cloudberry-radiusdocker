@@ -7,9 +7,8 @@ RUN opkg install shadow-useradd
 RUN opkg install shadow-su
 
 ADD freeradius2 /etc/freeradius2
-ADD init.sql /root/init.sql
+ADD db /root/db
 
 RUN sed -i -e "s+/var/postgresql+/home/postgresql+g" /etc/config/postgresql
 RUN mkdir -p /home/postgresql; chown postgres:postgres /home/postgresql
-RUN pg_ctl -U postgres init -w -D /home/postgresql/data
-RUN pg_ctl -U postgres start -D /home/postgresql/data; sleep 1; su postgres -s /usr/bin/psql < /root/init.sql; pg_ctl -U postgres stop -D /home/postgresql/data -m smart
+RUN /root/db/init.sh

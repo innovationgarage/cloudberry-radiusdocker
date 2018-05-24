@@ -174,7 +174,7 @@ authorize {
 	#  is meant to mirror the "users" file.
 	#
 	#  See "Authorization Queries" in sql.conf
-#	sql
+	sql
 
 	#
 	#  If you are using /etc/smbpasswd, and are also doing
@@ -403,7 +403,7 @@ accounting {
 	#  Log traffic to an SQL database.
 	#
 	#  See "Accounting queries" in sql.conf
-#	sql
+	sql
 
 	#
 	#  If you receive stop packets with zero session length,
@@ -451,28 +451,28 @@ session {
 
 	#
 	#  See "Simultaneous Use Checking Queries" in sql.conf
-#	sql
+	sql
 }
 
 
 #  Post-Authentication
 #  Once we KNOW that the user has been authenticated, there are
 #  additional steps we can take.
-#post-auth {
+post-auth {
 	#  Get an address from the IP Pool.
-#	main_pool
+	# main_pool
 
 	#
 	#  If you want to have a log of authentication replies,
 	#  un-comment the following line, and the 'detail reply_log'
 	#  section, above.
-#	reply_log
+	# reply_log
 
 	#
 	#  After authenticating the user, do another SQL query.
 	#
 	#  See "Authentication Logging Queries" in sql.conf
-#	sql
+	sql
 
 	#
 	#  Instead of sending the query to the SQL server,
@@ -583,7 +583,7 @@ session {
 
 #		attr_filter.access_reject
 #	}
-#}
+}
 
 #
 #  When the server decides to proxy a request to a home server,
