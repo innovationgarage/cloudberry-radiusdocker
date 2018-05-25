@@ -1,4 +1,6 @@
-FROM oskarirauta/lede-docker
+FROM innovationgarage/openwrt:snapshot-2018-05-24
+
+ADD customfeeds.conf /etc/opkg/customfeeds.conf
 
 RUN opkg update
 RUN opkg install pgsql-server pgsql-cli
@@ -6,9 +8,34 @@ RUN opkg install freeradius2-mod-always freeradius2-mod-attr-filter freeradius2-
 RUN opkg install shadow-useradd
 RUN opkg install shadow-su
 
+RUN opkg install git-http ca-bundle
+RUN opkg install python3-pip python3-cffi python3-cryptography
+
+RUN pip3 install --upgrade pip
+RUN pip install --upgrade setuptools
+RUN cd /usr/bin; ln -s python3 python
+
+RUN pip install gunicorn
+
+RUN opkg install nginx
+
+RUN git clone https://github.com/innovationgarage/cloudberry-djangoproject.git
+RUN cd cloudberry-djangoproject; pip3 install -r requirements.txt 
+RUN cd cloudberry-djangoproject; python manage.py migrate
+RUN cd cloudberry-djangoproject; python manage.py createsuperuser --noinput --username admin --email a@a.com
+RUN cd cloudberry-djangoproject; python manage.py shell -c "import django.contrib.auth.models; u=django.contrib.auth.models.User.objects.get(username='admin'); u.set_password('password'); u.save()"
+
 ADD freeradius2 /etc/freeradius2
 ADD db /root/db
+ADD cloudberry-djangoproject.service /etc/init.d/cloudberry-djangoproject
+RUN cd /etc/rc.d; ln -s ../init.d/cloudberry-djangoproject S99cloudberry-djangoproject
 
 RUN sed -i -e "s+/var/postgresql+/home/postgresql+g" /etc/config/postgresql
 RUN mkdir -p /home/postgresql; chown postgres:postgres /home/postgresql
 RUN /root/db/init.sh
+
+ADD nginx.conf /etc/nginx/nginx.conf
+
+EXPOSE 80
+EXPOSE 1812
+EXPOSE 1813
