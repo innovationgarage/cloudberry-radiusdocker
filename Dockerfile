@@ -37,5 +37,5 @@ RUN /root/db/init.sh
 ADD nginx.conf /etc/nginx/nginx.conf
 
 EXPOSE 80
-EXPOSE 1812
-EXPOSE 1813
+EXPOSE 1812/udp
+EXPOSE 1813/udp
