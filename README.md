@@ -1,7 +1,7 @@
 # Build image and start container
 
     docker build --tag cloudberry-radiusdocker .
-    CONTAINER=$(docker run -d -loudberry-radiusdocker /sbin/init)
+    CONTAINER=$(docker run -d cloudberry-radiusdocker /sbin/init)
     docker exec -it $CONTAINER /bin/sh
 
 # Test radius
